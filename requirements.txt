@@ -1,0 +1,7 @@
+Flask
+faster-whisper
+yt-dlp
+torch
+sentence-transformers
+numpy
+scipy
