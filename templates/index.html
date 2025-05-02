@@ -17,8 +17,7 @@
             backdrop-filter: blur(5px);
             min-height: 100vh;
             color: #f8f9fa;
-            position: relative;
-            padding-bottom: 70px; 
+            padding-bottom: 100px;
         }
         .card {
             background-color: rgba(0, 0, 0, 0.6);
@@ -36,18 +35,11 @@
             white-space: pre-wrap;
             max-height: 400px;
             overflow-y: auto;
-            position: relative;
+            overflow-x: auto;
         }
         pre:fullscreen {
             background-color: #000;
             padding: 2rem;
-        }
-        .pre-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            display: block;
-            color: #0dcaf0;
         }
         .fullscreen-btn {
             float: right;
@@ -55,6 +47,7 @@
             border: none !important;
             background: transparent;
             color: #f8f9fa;
+            outline: none !important;
         }
         .fullscreen-btn:hover {
             background: rgba(255, 255, 255, 0.1);
@@ -64,18 +57,20 @@
             color: #ccc;
         }
         .logout-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
+            position: relative;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
         }
     </style>
 </head>
 <body>
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-12 col-md-10 col-lg-8">
                 <div class="card shadow-sm p-4">
                     <h2 class="mb-4 text-center">GenAI Podcast Summarizer</h2>
                     <form id="summarizeForm">
@@ -95,29 +90,29 @@
         </div>
     </div>
 
-    <div id="bottomActionBtn" class="logout-btn text-center">
+    <div id="bottomActionBtn" class="logout-btn">
         <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Logout</a>
     </div>
 
     <script>
         const resultDiv = document.getElementById("result");
         const bottomActionBtn = document.getElementById("bottomActionBtn");
-    
+
         document.getElementById("summarizeForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const url = document.getElementById("url").value;
-    
+
             resultDiv.innerHTML = `<div class="loading text-center">⏳Transcribing and summarizing... please wait.</div>`;
-    
+
             try {
                 const response = await fetch("/summarize", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ url })
                 });
-    
+
                 const data = await response.json();
-    
+
                 if (data.error) {
                     resultDiv.innerHTML = `<div class="alert alert-danger"> ${data.error} </div>`;
                     bottomActionBtn.innerHTML = `
@@ -129,17 +124,13 @@
                             Transcript
                             <button onclick="toggleFullscreen('transcriptBlock')" class="btn btn-sm fullscreen-btn">⤊</button>
                         </h5>
-                        <pre id="transcriptBlock">
-    ${data.transcript}
-                        </pre>
-    
+                        <pre id="transcriptBlock">${data.transcript}</pre>
+
                         <h5 class="mt-4">
                             Summary
-                            <button onclick="toggleFullscreen('summaryBlock')" class="btn btn-outline-light btn-sm fullscreen-btn">⤊</button>
+                            <button onclick="toggleFullscreen('summaryBlock')" class="btn btn-sm fullscreen-btn">⤊</button>
                         </h5>
-                        <pre id="summaryBlock">
-    ${data.summary}
-                        </pre>
+                        <pre id="summaryBlock">${data.summary}</pre>
                     `;
                     bottomActionBtn.innerHTML = `
                         <a href="/" class="btn btn-outline-light">Home</a>
@@ -152,7 +143,7 @@
                 `;
             }
         });
-    
+
         function toggleFullscreen(elementId) {
             const elem = document.getElementById(elementId);
             if (!document.fullscreenElement) {
@@ -163,6 +154,6 @@
                 document.exitFullscreen();
             }
         }
-    </script>    
+    </script>
 </body>
 </html>
