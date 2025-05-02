@@ -65,12 +65,25 @@
             padding-left: 1rem;
             padding-right: 1rem;
         }
+
+        /* Mobile tweaks */
+        @media (max-width: 576px) {
+            h2 {
+                font-size: 1.5rem;
+            }
+            .fullscreen-btn {
+                font-size: 1.1rem;
+            }
+            pre {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container py-5">
+    <div class="container py-4">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
+            <div class="col-12 col-sm-11 col-md-10 col-lg-8">
                 <div class="card shadow-sm p-4">
                     <h2 class="mb-4 text-center">GenAI Podcast Summarizer</h2>
                     <form id="summarizeForm">
